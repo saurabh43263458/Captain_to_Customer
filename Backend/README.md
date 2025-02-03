@@ -19,6 +19,14 @@ The request body should be a JSON object containing the following fields:
     "email": "john.doe@example.com",
     "password": "password123"
 }
+```
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
 {
     "token": "<JWT_TOKEN>",
     "user": {
@@ -30,6 +38,12 @@ The request body should be a JSON object containing the following fields:
         "email": "john.doe@example.com"
     }
 }
+```
+
+#### Error:
+- **Status Code:** `400 Bad Request`
+- **Body:**
+```json
 {
     "errors": [
         {
@@ -49,6 +63,10 @@ The request body should be a JSON object containing the following fields:
         }
     ]
 }
+```
+
+### Example Request:
+```bash
 curl -X POST http://localhost:4000/users/register \
 -H "Content-Type: application/json" \
 -d '{
@@ -59,10 +77,37 @@ curl -X POST http://localhost:4000/users/register \
     "email": "john.doe@example.com",
     "password": "password123"
 }'
+```
+
+# User Login Endpoint
+
+## Endpoint: `/users/login`
+
+### Method: `POST`
+
+### Description:
+This endpoint is used to log in an existing user. It validates the input data, checks the user's credentials, and returns a JSON Web Token (JWT) along with the user details.
+
+### Request Body:
+The request body should be a JSON object containing the following fields:
+
+```json
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "email": "john.doe@example.com",
+    "password": "password123"
+}
+```
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+    "token": "<JWT_TOKEN>",
     "user": {
-        "_id": "60d0fe4f5311236168a109ca",
+        "_id": "<USER_ID>",
         "fullname": {
             "firstname": "John",
             "lastname": "Doe"
@@ -70,3 +115,41 @@ curl -X POST http://localhost:4000/users/register \
         "email": "john.doe@example.com"
     }
 }
+```
+
+#### Error:
+- **Status Code:** `400 Bad Request`
+- **Body:**
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid Email",
+            "param": "email",
+            "location": "body"
+        },
+        {
+            "msg": "password must be at least 6 characters long",
+            "param": "password",
+            "location": "body"
+        }
+    ]
+}
+```
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+```json
+{
+    "message": "Invalid email or password"
+}
+```
+
+### Example Request:
+```bash
+curl -X POST http://localhost:4000/users/login \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "john.doe@example.com",
+    "password": "password123"
+}'
+```
