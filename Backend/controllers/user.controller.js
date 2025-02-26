@@ -1,3 +1,4 @@
+const blacklist = require('../models/blacklistToken');
 const userModel = require('../models/user.model')
 const userService = require('../service/user.service')
 const {validationResult} = require('express-validator');
@@ -7,7 +8,7 @@ module.exports.registerUser = async (req,res,next) =>{
   if(!errors.isEmpty()){
     return res.status(400).json({errors:errors.array()});
   }
-
+  console.log(req.body)
   const {fullname,email,password} = req.body;
   const hashPassword = await userModel.hashPassword(password);
   
@@ -43,6 +44,17 @@ module.exports.loginUser =async (req,res,next) =>{
    res.status(200).json({token,user})
 }
 
-module.exports.getUserProfile =async(req,res,next)=>{
-  res.status(200).json(req.user);
-}
+module.exports.getUserProfile = async (req, res,next) => {
+  if (!req.user) {
+      return res.status(404).json({ message: "User not found" });
+  }
+  res.status(200).json({"success":true ,"message":`${req.user}`});
+  next();
+};
+
+module.exports.logout = async(req,res,next)=>{
+   res.clearCookie('token');
+   const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+   await blacklist.create({token});
+   res.status(200).json({"success":true,"message":"user is logedOut"});
+};

@@ -153,3 +153,83 @@ curl -X POST http://localhost:4000/users/login \
     "password": "password123"
 }'
 ```
+
+# User Profile Endpoint
+
+## Endpoint: `/users/profile`
+
+### Method: `GET`
+
+### Description:
+This endpoint retrieves the profile information of the authenticated user. Requires a valid JWT token in the request header.
+
+### Authentication:
+Requires Bearer token in Authorization header:
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+    "success": true,
+    "message": "<USER_DETAILS>"
+}
+```
+
+#### Error:
+- **Status Code:** `404 Not Found`
+- **Body:**
+```json
+{
+    "message": "User not found"
+}
+```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:4000/users/profile \
+-H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+# User Logout Endpoint
+
+## Endpoint: `/users/logout`
+
+### Method: `GET`
+
+### Description:
+This endpoint logs out the user by clearing the authentication token cookie and adding the token to a blacklist to prevent reuse.
+
+### Authentication:
+Requires either:
+- Token in cookie
+- Bearer token in Authorization header
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+    "success": true,
+    "message": "user is logedOut"
+}
+```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:4000/users/logout \
+-H "Authorization: Bearer <JWT_TOKEN>" \
+--cookie "token=<JWT_TOKEN>"
+```
+
+### Security Notes:
+- The token is invalidated and added to a blacklist
+- The token cookie is cleared from the client
+- Both cookie-based and header-based token authentication are supported
