@@ -342,3 +342,99 @@ curl -X POST http://localhost:4000/captains/register \
 - Phone number must be in international format
 - Driver's license number must be valid
 - Email must be unique in the system
+
+# Captain Profile Endpoint
+
+## Endpoint: `/captains/profile`
+
+### Method: `GET`
+
+### Description:
+This endpoint retrieves the profile information of the authenticated captain/driver. Requires a valid JWT token in the request header.
+
+### Authentication:
+Requires Bearer token in Authorization header:
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+    "success": true,
+    "captain": {
+        "_id": "<CAPTAIN_ID>",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "phoneNumber": "+1234567890",
+        "vehicleDetails": {
+            "model": "Toyota Camry",
+            "year": "2020",
+            "licensePlate": "ABC123",
+            "color": "Black"
+        },
+        "driverLicense": "DL12345678"
+    }
+}
+```
+
+#### Error:
+- **Status Code:** `404 Not Found`
+- **Body:**
+```json
+{
+    "message": "Captain not found"
+}
+```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:4000/captains/profile \
+-H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+# Captain Logout Endpoint
+
+## Endpoint: `/captains/logout`
+
+### Method: `GET`
+
+### Description:
+This endpoint logs out the captain by clearing the authentication token cookie and adding the token to a blacklist to prevent reuse.
+
+### Authentication:
+Requires either:
+- Token in cookie
+- Bearer token in Authorization header
+
+### Responses:
+
+#### Success:
+- **Status Code:** `200 OK`
+- **Body:**
+```json
+{
+    "success": true,
+    "message": "captain is logged out"
+}
+```
+
+### Example Request:
+```bash
+curl -X GET http://localhost:4000/captains/logout \
+-H "Authorization: Bearer <JWT_TOKEN>" \
+--cookie "token=<JWT_TOKEN>"
+```
+
+### Security Notes:
+- The token is invalidated and added to a blacklist
+- The token cookie is cleared from the client
+- Both cookie-based and header-based token authentication are supported
+- Token blacklisting prevents unauthorized reuse of expired tokens

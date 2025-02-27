@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-
+const captainModel =require("../models/captain.model");
+const blacklistToken = require("../models/blacklistToken");
 module.exports.authUser = async (req, res, next) => {
 
     const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
@@ -28,3 +29,25 @@ module.exports.authUser = async (req, res, next) => {
         return res.status(401).json({ message: "Unauthorized: Invalid token" });
     }
 };
+
+module.exports.authCaptain = async(req,res,next)=>{
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    if(!token){
+        res.status(401).json({"success":false,message:"token is not found"});
+
+    }
+    const isblacklisted = await blacklistToken.findOne({token:token})
+    if (isblacklisted) {
+        return res.status(401).json({ message: 'Unauthorized blacklist' });
+    }
+    try{
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+        const captain = captainModel.findById(decoded._id);
+        req.captain =captain;
+        return next();
+    }
+    catch(err){
+        console.log(err);
+        res.status(401).json({success:false,message:"unauthorized"});
+    }
+}
