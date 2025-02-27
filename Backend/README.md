@@ -233,3 +233,112 @@ curl -X GET http://localhost:4000/users/logout \
 - The token is invalidated and added to a blacklist
 - The token cookie is cleared from the client
 - Both cookie-based and header-based token authentication are supported
+
+# Captain Registration Endpoint
+
+## Endpoint: `/captains/register`
+
+### Method: `POST`
+
+### Description:
+This endpoint is used to register a new captain/driver. It validates the input data, hashes the password, creates a new captain in the database, and returns a JSON Web Token (JWT) along with the captain details.
+
+### Request Body:
+The request body should be a JSON object containing the following fields:
+
+```json
+{
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "phoneNumber": "+1234567890",
+    "vehicleDetails": {
+        "model": "Toyota Camry",
+        "year": "2020",
+        "licensePlate": "ABC123",
+        "color": "Black"
+    },
+    "driverLicense": "DL12345678"
+}
+```
+
+### Validation Requirements:
+- `email`: Must be a valid email address
+- `fullname.firstname`: Minimum 3 characters
+- `password`: Minimum 6 characters
+- `phoneNumber`: Valid phone number format
+- `driverLicense`: Required field
+- `vehicleDetails`: All fields are required
+
+### Responses:
+
+#### Success:
+- **Status Code:** `201 Created`
+- **Body:**
+```json
+{
+    "token": "<JWT_TOKEN>",
+    "captain": {
+        "_id": "<CAPTAIN_ID>",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "phoneNumber": "+1234567890",
+        "vehicleDetails": {
+            "model": "Toyota Camry",
+            "year": "2020",
+            "licensePlate": "ABC123",
+            "color": "Black"
+        },
+        "driverLicense": "DL12345678"
+    }
+}
+```
+
+#### Error:
+- **Status Code:** `400 Bad Request`
+- **Body:**
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid Email",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+### Example Request:
+```bash
+curl -X POST http://localhost:4000/captains/register \
+-H "Content-Type: application/json" \
+-d '{
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "phoneNumber": "+1234567890",
+    "vehicleDetails": {
+        "model": "Toyota Camry",
+        "year": "2020",
+        "licensePlate": "ABC123",
+        "color": "Black"
+    },
+    "driverLicense": "DL12345678"
+}'
+```
+
+### Notes:
+- All vehicle details are required for registration
+- Phone number must be in international format
+- Driver's license number must be valid
+- Email must be unique in the system
