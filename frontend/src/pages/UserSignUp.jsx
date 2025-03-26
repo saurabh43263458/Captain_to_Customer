@@ -20,7 +20,6 @@ const UserSignUp = () => {
     setformData({
         firstname:" ",
         lastname:" ",
-     
       email:" ",
       password:" ",
     })
@@ -28,7 +27,7 @@ const UserSignUp = () => {
   return (
     <div className='h-screen flex flex-col '>
      
-     <img className="w-25 ml-8 mt-2" src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png" alt="" />
+     <img className="w-25 ml-8 mt-2" src="https://pngimg.com/d/uber_PNG24.png" alt="" />
 
       <div className=' h-screen flex flex-col justify-between py-8 mx-9'>
         <form onSubmit={handlesubmit} action="" className=''>
@@ -48,7 +47,7 @@ const UserSignUp = () => {
             handlechange("password",e.target.value);
           }}/>
         <button type="submit" className='bg-black w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Login</button>
-        <p className="text-xl mt-2 font-bold text-center">Already have a account <Link className='text-blue-600'>Login Here</Link></p>
+        <p className="text-xl mt-2 font-bold text-center">Already have a account <Link to="/captain-login" className='text-blue-600'>Login Here</Link></p>
         </form>
        <Link to="/captain-signup" className='w-full bg-green-500 flex justify-center items-center py-5 rounded-2xl text-2xl font-bold'>Sign up as Captain</Link>
    

@@ -1,20 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState ,useContext,useEffect} from 'react'
+import {UserContext} from '../ContextApi/userContextapi';
 import {Link} from 'react-router-dom'
 const UserLogin = () => {
   const [Email,setEmail]= useState('');
   const [Password,setPassword]= useState('');
   const [UserData,setUserData]=useState({});
-
+  const {user,setUser} = useContext(UserContext)
   const submitUserData =(e)=>{
     e.preventDefault();
     setUserData({
       email:Email,
       password:Password
     })
-    console.log(UserData)
+    setUser({name:"unknow",email:Email})
+    
     setEmail(' ');
     setPassword(' ');
   }
+  useEffect(() => {
+    console.log("Updated user:", user);
+  }, [user]);
   return (
   
     <div className="h-screen flex flex-col ">
@@ -23,6 +28,7 @@ const UserLogin = () => {
       <div className='my-8 h-screen mx-8 flex flex-col justify-between '>
       <form className=" flex flex-col justify-between" onSubmit={(e)=>{
         submitUserData(e);
+        
       }}>
          <h2 className='text-3xl font-bold '>What's your email</h2>
          <input className="w-full bg-gray-300 placeholder:text-2xl px-2 py-5 my-4" type="email" required placeholder='email123@gmail.com' 
