@@ -1,9 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React ,{useState,useContext}from 'react'
+import { Link ,useNavigate} from 'react-router-dom'
 import Input from "../Components/input"
+import axios from "axios";
+import { UserContext } from '../ContextApi/userContextapi';
 
-import { useState } from 'react'
 const UserSignUp = () => {
+const navigate = useNavigate();
+const {user,setUser} =useContext(UserContext);
   const [formData,setformData]=useState({
       firstname:"",
       lastname:"",
@@ -13,16 +16,34 @@ const UserSignUp = () => {
   const handlechange =(field,value)=>{
    setformData({...formData ,[field]:value});
   };
+
+ 
   
-  const handlesubmit =(e)=>{
+  const handlesubmit =async (e)=>{
     e.preventDefault();
-    console.log(formData);
+    const newuser = {
+      fullname:{
+        firstname:formData.firstname,
+        lastname:formData.lastname,
+      },
+      email:formData.email,
+      password:formData.password,
+    }
+    console.log(user)
+    const response = axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,newuser)
+    console.log(response)
+    if(response.status===201){
+      console.log({success:true,message:"User created successfully"})
+      setUser({name:response.data.fullname.firstname,email:response.data.email})
+      localStorage.setItem("token",response.data.token);
+    }
     setformData({
         firstname:" ",
         lastname:" ",
       email:" ",
       password:" ",
     })
+    navigate("/start-home");
   }
   return (
     <div className='h-screen flex flex-col '>
@@ -46,7 +67,7 @@ const UserSignUp = () => {
           <Input config={{type:"password" , placeholder:"Enter your password"}} value={formData.password} onChange={(e)=>{
             handlechange("password",e.target.value);
           }}/>
-        <button type="submit" className='bg-black w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Login</button>
+        <button type="submit" className='bg-black w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Create account</button>
         <p className="text-xl mt-2 font-bold text-center">Already have a account <Link to="/captain-login" className='text-blue-600'>Login Here</Link></p>
         </form>
        <Link to="/captain-signup" className='w-full bg-green-500 flex justify-center items-center py-5 rounded-2xl text-2xl font-bold'>Sign up as Captain</Link>
