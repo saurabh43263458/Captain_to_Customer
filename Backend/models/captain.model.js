@@ -41,7 +41,7 @@ const captainSchema = new mongoose.Schema({
             minlength:[3,'colr name must be 3 char'],
         },
         plate:{
-            type:Number,
+            type:String,
             required:true,
             minlength:[3,'plate must be atleast 3 characters long'],
         },
