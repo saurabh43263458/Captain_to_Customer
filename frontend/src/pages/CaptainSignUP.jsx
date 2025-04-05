@@ -93,7 +93,7 @@ return (
           handlechange("vehiclecapcity",e.target.value);
         }}/>
       <button type="submit" className='bg-black w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Create account</button>
-      <p className="text-xl mt-2 font-bold text-center">Already have a account <Link className='text-blue-600'>Login Here</Link></p>
+      <p className="text-xl mt-2 font-bold text-center">Already have a account <Link to='/captain-login' className='text-blue-600'>Login Here</Link></p>
       </form>
      <Link to="/signup" className='w-full bg-green-500 flex justify-center items-center py-5 rounded-2xl text-2xl font-bold'>Sign up as User</Link>
  
