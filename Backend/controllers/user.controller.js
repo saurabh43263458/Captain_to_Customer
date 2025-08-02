@@ -47,13 +47,11 @@ module.exports.loginUser =async (req,res,next) =>{
    res.status(200).json({token,user})
 }
 
-module.exports.getUserProfile = async (req, res,next) => {
-  if (!req.user) {
-      return res.status(404).json({ message: "User not found" });
-  }
-  res.status(200).json({"success":true ,"message":`${req.user}`});
-  next();
-};
+module.exports.getUserProfile = async (req, res, next) => {
+
+    res.status(200).json(req.user);
+
+}
 
 module.exports.logout = async(req,res,next)=>{
   res.clearCookie('token');

@@ -50,9 +50,20 @@ module.exports.loginCaptain = async(req,res,next)=>{
 }
 
 
-module.exports.profileCaptain = async(req,res,next)=>{
-    res.status(200).json({success:true,message:`${req.captain}`})
-}
+module.exports.profileCaptain = async (req, res, next) => {
+  try {
+    const captain = req.captain;
+    if (!captain) {
+      return res.status(404).json({ success: false, message: "Captain not found" });
+    }
+    console.log(captain);
+    return res.status(200).json({ success: true,message: "Captain profile retrieved successfully", captain });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 
 module.exports.logout = async(req,res,next)=>{
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];

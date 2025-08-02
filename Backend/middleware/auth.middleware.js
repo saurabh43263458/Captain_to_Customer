@@ -14,7 +14,7 @@ module.exports.authUser = async (req, res, next) => {
         return res.status(401).json({"success":false,"message":"unauthorized"});
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded =  jwt.verify(token, process.env.JWT_SECRET);
         const user = await userModel.findById(decoded._id);
         if (!user) {
             return res.status(401).json({ message: "Unauthorized: User not found" });
@@ -42,7 +42,12 @@ module.exports.authCaptain = async(req,res,next)=>{
     }
     try{
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        const captain = captainModel.findById(decoded._id);
+        
+        const captain = await captainModel.findById(decoded._id).select('-password');
+        
+        if (!captain) {
+      return res.status(401).json({ success: false, message: "Captain not found" });
+    }
         req.captain =captain;
         return next();
     }
