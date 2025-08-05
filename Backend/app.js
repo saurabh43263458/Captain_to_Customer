@@ -9,6 +9,7 @@ const userRoutes = require('./routes/user.routes')
 const captainRoutes = require('./routes/captain.routes');
 const mapRoutes = require('./routes/maps.routes');
 const rideRoutes = require('./routes/ride.route');
+const paymentRoutes = require("./routes/paymentRoutes");
 connectToDb();
 app.use(cookieParser());
 app.use(cors());
@@ -21,4 +22,5 @@ app.use('/captains',captainRoutes);
 app.use('/user',userRoutes);
 app.use('/maps',mapRoutes)
 app.use('/ride',rideRoutes);
+app.use("/payment", paymentRoutes);
 module.exports = app;

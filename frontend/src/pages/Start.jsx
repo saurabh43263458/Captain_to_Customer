@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Input from "../Components/input"
 import { useGSAP } from "@gsap/react";
 import 'remixicon/fonts/remixicon.css'
+import LiveTracking from '../Components/LiveTracking';
 import gsap from 'gsap';
 import LocationPanel from '../Components/LocationPanel';
 import Vehicletype from '../Components/Vehicletype';
@@ -11,7 +12,7 @@ import axios from 'axios';
 import { SocketContext } from '../ContextApi/SocketContext';
 import { useContext } from 'react';
 import { UserContext } from '../ContextApi/userContextapi';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import WaitingForDriver from '../Components/WaitingForDriver';
 const Start = () => {
   const [pickup, setPickup] = useState("");
@@ -40,24 +41,23 @@ const Start = () => {
  const [fare, setfare] = useState({})
  const { socket } = useContext(SocketContext)
  const { user } = useContext(UserContext)
-
-  useEffect(() => {
-   
+  const navigate =useNavigate();
+   useEffect(() => {
         socket.emit("join", { userType: "user", userId: user._id })
     }, [ user ])
-  socket.on('ride-confirmed', ride => {
+ socket.on('ride-confirmed', ride => {
 
-
+ setRide(ride)
         setVehicleFound(false)
         setWaitingForDriver(true)
-        setRide(ride)
+       
     })
 
  console.log("ride", ride);
     socket.on('ride-started', ride => {
-        console.log(ride)
+        console.log("hello" +ride)
         setWaitingForDriver(false)
-       
+       navigate('/riding', { state: { ride } })
     })
   // Fetch suggestions when pickup or drop changes and panel is open
   useEffect(() => {
@@ -182,16 +182,18 @@ async function createRide() {
     if (panel) {
       gsap.to(panelRef.current, {
         height: "70%",
+        padding: 24,
         duration: 0.5,
       })
       gsap.to(panelIconRef.current, {
-        autoAlpha: panel ? 1 : 0,
+        opacity: 1,
         duration: 0.3,
       })
     }
     else {
       gsap.to(panelRef.current, {
         height: "0%",
+         padding: 0,
       })
       gsap.to(panelIconRef.current, {
         opacity: 0,
@@ -243,17 +245,20 @@ async function createRide() {
             })
         }
     }, [ waitingForDriver ])
+    
   return (
-    <div className='h-100% relative'>
-      <img src="https://download.logo.wine/logo/Uber/Uber-Logo.wine.png" alt="" className='w-24 left-5 top-5 absolute ' />
-      <div className='h-screen w-screen'>
-        <img className="h-full w-full object-cover" src="https://miro.medium.com/v2/resize:fit:1100/format:webp/0*gwMx05pqII5hbfmX.gif" alt="" />
-      </div>
+    <div className='h-screen relative '>
+            <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+            <div className='h-screen w-screen'>
+                
+                <LiveTracking />
+            </div>
       <div className='flex flex-col justify-end h-screen absolute bottom-0  w-full '>
-        <div className="bg-white h-[30%] py-5 px-5 relative">
+        <div className="bg-white h-[40%] py-5 px-5">
           <h5 ref={panelIconRef} onClick={() => setpanel(false)} className=' absolute top-2 right-2 opacity-0 cursor-pointer'><i className="ri-arrow-down-s-line"></i></h5>
           <h4 className=" text-2xl font-semibold ">Find a trip</h4>
-          <form onSubmit={submithandler}>
+          <form className='relative py-3' onSubmit={submithandler}>
+            
             <input
               type="text"
               placeholder="Add a pick-up location"
@@ -289,7 +294,7 @@ async function createRide() {
           </form>
           
         </div>
-       <div ref={panelRef} className="bg-white px-5 max-h-[70vh] overflow-auto">
+      <div ref={panelRef} className='bg-white h-0'>
   {panel && (
     <LocationPanel
       suggestions={locationSuggestions}

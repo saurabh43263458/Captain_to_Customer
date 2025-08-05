@@ -38,21 +38,16 @@ const handlesubmit =async (e)=>{
       vehicleType:formData.vehicletype
     }      }
   const response= await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`,newcaptain);
-  if(response.status===201){
+  if(response.status===200){
     localStorage.setItem("token",response.data.token);
     console.log(response.data);
+    alert("Captain registered successfully");
+    navigate('/captain-login');
   }
-setformData({
-    firstname:" ",
-    lastname:" ",
-  email:" ",
-  password:" ",
-  vehiclecolor:" ",
-  vehicleplate:" ",
-  vehiclecapcity:" ",
-  vehicletype:" ",
-   })
-   navigate('/captain-login');
+  else{
+    alert("Something went wrong");
+  }
+   
 }
 return (
   <div className='h-screen flex flex-col '>

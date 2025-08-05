@@ -79,7 +79,7 @@ module.exports.confirmRide = async (req, res) => {
             data: ride
         })
 
-        return res.status(200).json(ride);
+        return res.status(200).json({"message":ride,});
     } catch (err) {
 
         console.log(err);

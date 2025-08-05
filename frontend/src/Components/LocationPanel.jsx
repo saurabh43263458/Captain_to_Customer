@@ -2,7 +2,7 @@ import React from 'react'
 
 const LocationPanel = ({ suggestions = [], onSuggestionClick }) => {
   return (
-    <div className='mt-4'>
+    <div className=''>
       {suggestions.length > 0 ? (
         suggestions.map((suggestion, idx) =>
           suggestion && suggestion.description ? (

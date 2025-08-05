@@ -11,7 +11,7 @@ const rideSchema = new mongoose.Schema({
     },
     captain: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Captain',
+        ref: 'captain',
     },
     pickup: {
         type: String,
@@ -49,8 +49,9 @@ const rideSchema = new mongoose.Schema({
         type: String,
     },
     otp:{
-        type: Number,
-        select:false,
+        type: String,
+        select: false,
+        required: true,
     }
 });
 module.exports = mongoose.model('Ride', rideSchema);

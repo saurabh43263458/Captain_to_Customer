@@ -71,7 +71,7 @@ async function confirmRide({ rideId, captain }) {
         captain: captain._id
     });
     const ride = await rideModel.findOne({ _id: rideId }).populate('user')
-        .populate('Captain')
+        .populate('captain').populate('otp')
        
     if (!ride) throw new Error('Ride not found');
     return ride;

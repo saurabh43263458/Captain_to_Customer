@@ -30,7 +30,9 @@ const ConfirmedVehicle = ({ Image,createRide,pickup,drop,choosevehicle, setConfi
         </div>
         <div className='flex items-center justify-between w-full px-5 py-2'>
           <h2 className='text-2xl font-bold'>Price</h2>
-          <h3 className='text-2xl font-bold'>{choosevehicle.price}</h3>
+          <h3 className='text-2xl font-bold'>
+  {choosevehicle?.price != null ? `₹${choosevehicle.price}` : "Price not available"}
+</h3>
  </div>
   <button onClick={() => {
   setConfirmedVehicle(false);

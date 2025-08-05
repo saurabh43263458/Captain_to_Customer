@@ -40,9 +40,9 @@ const RidePopUp = (props) => {
                 </div>
                 <div className='mt-5 w-full '>
                     <button onClick={() => {
-                        props.setConfirmRidePopupPanel(true)
-                       props.confirmRide()
-                      
+                        console.log("Accept clicked");
+                      props.confirmRide(); // run first
+                        props.setRidePopupPanel(false); // then close the panel
                     }} className=' bg-green-600 w-full text-white font-semibold p-2 px-10 rounded-lg'>Accept</button>
 
                     <button onClick={() => {

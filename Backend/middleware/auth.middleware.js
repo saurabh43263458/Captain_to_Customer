@@ -43,7 +43,7 @@ module.exports.authCaptain = async(req,res,next)=>{
     try{
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
         
-        const captain = await captainModel.findById(decoded._id).select('-password');
+        const captain = await captainModel.findById(decoded._id)
         
         if (!captain) {
       return res.status(401).json({ success: false, message: "Captain not found" });
