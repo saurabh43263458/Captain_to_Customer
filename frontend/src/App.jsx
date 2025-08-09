@@ -8,10 +8,7 @@ import UserSignUp from "./pages/UserSignUp"
 import CaptainLogin from "./pages/CaptainLogin"
 import CaptainSignUp from './pages/CaptainSignUP'
 
-<<<<<<< HEAD
 
-=======
->>>>>>> dd92f96997003b768b3d80176a35b877c542ff59
 import Start from './pages/Start.jsx'
 import UserProtectedWrapper from './pages/UserProtectedWrapper'
 import UserLogout from './pages/UserLogout'
