@@ -4,6 +4,7 @@ import Input from "../Components/input"
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import { useState } from 'react'
+import fleet from "../assets/img/fleet1.png"
 const CaptainSignUP = () => {
   const navigate = useNavigate();
   const [formData,setformData]=useState({
@@ -51,9 +52,7 @@ const handlesubmit =async (e)=>{
 }
 return (
   <div className='h-screen flex flex-col '>
-   
-   <img className="w-25 ml-8 mt-2" src="https://pngimg.com/d/uber_PNG24.png" alt="" />
-
+    <div className=' w-full ml-5 mt-10'> <img className="h-10" src={fleet}></img></div>
     <div className=' h-screen flex flex-col justify-between py-8 mx-9'>
       <form onSubmit={handlesubmit} action="" className=''>
         <h2 className="text-2xl font-bold">Where's your name</h2>
@@ -80,17 +79,17 @@ return (
           handlechange("vehicleplate",e.target.value);
         }}/>
         <h2 className="text-2xl font-bold">Vehicle Type</h2>
-        <Input config={{type:"text" ,placeholder:"'car','motorcycle','auto'"}} value={formData.vehicletype} onChange={(e)=>{
+        <Input config={{type:"text" ,placeholder:"'Car','Motorcycle','Auto','Van'"}} value={formData.vehicletype} onChange={(e)=>{
           handlechange("vehicletype",e.target.value);
         }}/>
         <h2 className="text-2xl font-bold">Vehicle Capacity</h2>
         <Input config={{type:"number" ,placeholder:"Enter your Vehicle capacity"}} value={formData.vehiclecapcity} onChange={(e)=>{
           handlechange("vehiclecapcity",e.target.value);
         }}/>
-      <button type="submit" className='bg-black w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Create account</button>
-      <p className="text-xl mt-2 font-bold text-center">Already have a account <Link to='/captain-login' className='text-blue-600'>Login Here</Link></p>
+      <button type="submit" className='bg-[#00B894] w-full rounded-2xl py-4 text-white font-bold text-2xl my-3' >Create account</button>
+      <p className="text-xl mt-2 font-bold text-center">Already have a account <Link to='/captain-login' className='text-blue-600 underline'>Login Here</Link></p>
       </form>
-     <Link to="/signup" className='w-full bg-green-500 flex justify-center items-center py-5 rounded-2xl text-2xl font-bold'>Sign up as User</Link>
+     <Link to="/signup" className='w-full bg-[#2988d1] flex justify-center items-center py-5 rounded-2xl text-2xl font-bold'>Sign up as User</Link>
  
   </div>
   </div>

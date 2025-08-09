@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Input from "../Components/input"
+
 import { useGSAP } from "@gsap/react";
 import 'remixicon/fonts/remixicon.css'
 import LiveTracking from '../Components/LiveTracking';
@@ -248,53 +249,81 @@ async function createRide() {
     
   return (
     <div className='h-screen relative '>
-            <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+            
             <div className='h-screen w-screen'>
                 
                 <LiveTracking />
             </div>
       <div className='flex flex-col justify-end h-screen absolute bottom-0  w-full '>
-        <div className="bg-white h-[40%] py-5 px-5">
+        <div className="bg-white h-[40%] py-5 px-5 rounded-t-3xl">
           <h5 ref={panelIconRef} onClick={() => setpanel(false)} className=' absolute top-2 right-2 opacity-0 cursor-pointer'><i className="ri-arrow-down-s-line"></i></h5>
-          <h4 className=" text-2xl font-semibold ">Find a trip</h4>
-          <form className='relative py-3' onSubmit={submithandler}>
-            
-            <input
-              type="text"
-              placeholder="Add a pick-up location"
-              value={pickup}
-              onChange={(e) => {
-                setPickup(e.target.value);
-                setActiveInput("pickup");
-                setpanel(true);
-              }}
-              onClick={() => {
-                setpanel(true);
-                setActiveInput("pickup");
-              }}
-              className="px-3 py-5 w-full bg-gray-300 my-2 placeholder:text-2xl rounded-xl"
-            />
+          <h4 className=" text-2xl font-semibold ">Find Your Trip</h4>
+         <form className="bg-white p-4 " onSubmit={submithandler}>
+  <div className="flex">
+    {/* LEFT: Icons + Dotted Line */}
+    <div className="flex flex-col items-center">
+      {/* Pickup Circle */}
+      <div className="w-3 h-3 border-2 border-green-500 rounded-full mt-2"></div>
+      {/* Dotted Line */}
+      <div className="flex-1 border-l-2 border-dotted border-gray-400 my-1" style={{ minHeight: "32px" }}></div>
+      {/* Drop Pin */}
+      <i className="ri-map-pin-fill text-red-500 text-lg mb-1"></i>
+    </div>
 
-            <input
-              type="text"
-              placeholder="Enter your drop location"
-              value={drop}
-              onChange={(e) => {
-                setDrop(e.target.value);
-                setActiveInput("drop");
-                setpanel(true);
-              }}
-              onClick={() => {
-                setpanel(true);
-                setActiveInput("drop");
-              }}
-              className="px-3 py-5 w-full bg-gray-300 my-2 placeholder:text-2xl rounded-xl"
-            />
-            <button className='w-full bg-amber-400 py-1 rounded-2xl  text-[1.7rem] font-bold my-4' >find rider</button>
-          </form>
+    {/* RIGHT: Inputs */}
+    <div className="flex flex-col flex-1 ml-3">
+      {/* Pickup */}
+      <div className="mb-3">
+        <label className="text-lg text-gray-500 font-semibold">PICKUP</label>
+        <input
+          type="text"
+          placeholder="My current location"
+          value={pickup}
+          onChange={(e) => {
+            setPickup(e.target.value);
+            setActiveInput("pickup");
+            setpanel(true);
+          }}
+          onClick={() => {
+            setpanel(true);
+            setActiveInput("pickup");
+          }}
+          className="w-full bg-transparent placeholder:text-gray-400 placeholder:text-xl text-gray-800 text-xl focus:outline-none"
+        />
+      </div>
+
+      {/* Drop */}
+      <div>
+        <label className="text-lg text-gray-500 font-semibold">DROP-OFF</label>
+        <input
+          type="text"
+          placeholder="Enter drop location"
+          value={drop}
+          onChange={(e) => {
+            setDrop(e.target.value);
+            setActiveInput("drop");
+            setpanel(true);
+          }}
+          onClick={() => {
+            setpanel(true);
+            setActiveInput("drop");
+          }}
+          className="w-full bg-transparent placeholder:text-gray-400 placeholder:text-xl text-gray-800 text-xl focus:outline-none"
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* Button */}
+  <button className="w-full bg-[#00B894] text-white rounded-2xl text-2xl font-bold mt-4 py-4">
+    Find Rider
+  </button>
+</form>
+
+
           
         </div>
-      <div ref={panelRef} className='bg-white h-0'>
+      <div ref={panelRef} className='bg-white h-0 '>
   {panel && (
     <LocationPanel
       suggestions={locationSuggestions}
@@ -306,7 +335,7 @@ async function createRide() {
 </div>
 
       </div>
-      <div ref={vehicletypeRef} className="fixed w-full z-10  bottom-0 translate-y-full bg-white px-3 py-10 pt-12'">
+      <div ref={vehicletypeRef} className="fixed w-full z-9  bottom-0 translate-y-full bg-white px-3 py-10 pt-12 rounded-t-3xl'">
         <Vehicletype
           setvehicletype={setvehiclePanel}
           setConfirmedVehicle={setConfirmedVehicle}
@@ -316,10 +345,10 @@ async function createRide() {
           setfare={setfare}
         />
       </div>
-      <div ref={confirmedvehicleRef} className="fixed w-full z-10  bottom-0 translate-y-full bg-white px-3 ">
+      <div ref={confirmedvehicleRef} className="fixed w-full z-8 bottom-0 translate-y-full bg-white px-3 ">
         <ConfirmedVehicle pickup={pickup} drop={drop} setConfirmedVehicle={setConfirmedVehicle} choosevehicle={choosevehicle} setvehiclefound={setVehicleFound} createRide={createRide} />
       </div>
-      <div ref={vehiclefoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
+      <div ref={vehiclefoundRef} className='fixed w-full bottom-0 z-7 translate-y-full bg-white px-3 py-6 pt-12'>
                 <Lookingfordriver
                     createRide={createRide}
                     pickup={pickup}
@@ -328,7 +357,7 @@ async function createRide() {
                     vehicleType={confirmedvehicle}
                     setVehicleFound={setVehicleFound} />
             </div>
-      <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-12'>
+      <div ref={waitingForDriverRef} className='fixed w-full  rounded-t-3xl z-6 bottom-0  bg-white px-3 py-6 pt-12'>
                 <WaitingForDriver
                     ride={ride}
                     setVehicleFound={setVehicleFound}

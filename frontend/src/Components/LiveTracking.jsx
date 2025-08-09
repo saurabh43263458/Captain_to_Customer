@@ -60,7 +60,20 @@ const LiveTracking = () => {
                 center={currentPosition}
                 zoom={15}
             >
-                <Marker position={currentPosition} />
+               <Marker
+  position={currentPosition}
+  icon={{
+    path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+    fillColor: "#00B894", // Green color
+    fillOpacity: 1,
+    strokeWeight: 2,
+    strokeColor: "#ffffff", // White border for contrast
+    scale: 3, // Size multiplier
+    anchor: { x: 12, y: 24 }
+ // Bottom center anchor
+  }}
+/>
+
             </GoogleMap>
         </LoadScript>
     )

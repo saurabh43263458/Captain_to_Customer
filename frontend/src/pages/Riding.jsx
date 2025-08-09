@@ -9,7 +9,7 @@ const Riding = () => {
   const { ride } = location.state || {};
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
-  const [paymentSuccess, setPaymentSuccess] = useState(false); // ✅ track payment state
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -42,19 +42,16 @@ const Riding = () => {
         description: "Fare for completed ride",
         order_id: orderId,
         handler: async function (response) {
-            console.log('Payment response:', response);
-    
-            
-         await axios.post(`${import.meta.env.VITE_BASE_URL}/payment/verify`, {
-  razorpay_order_id: response.razorpay_order_id,
-  razorpay_payment_id: response.razorpay_payment_id,
-  razorpay_signature: response.razorpay_signature,
-  userId: ride.user._id, // ✅ Add this line
-  rideId: ride._id,
-  amount: Math.round(ride.fare)
-});
+          await axios.post(`${import.meta.env.VITE_BASE_URL}/payment/verify`, {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            userId: ride.user._id,
+            rideId: ride._id,
+            amount: Math.round(ride.fare)
+          });
 
-          setPaymentSuccess(true); // ✅ Set payment success
+          setPaymentSuccess(true);
         },
         prefill: {
           name: ride?.userName || "Customer",
@@ -62,7 +59,7 @@ const Riding = () => {
           contact: "7985165277"
         },
         theme: {
-          color: "#28a745"
+          color: "#00B894"
         }
       };
 
@@ -75,58 +72,97 @@ const Riding = () => {
   };
 
   return (
-    <div className='h-screen'>
-      <Link to='/home' className='fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full'>
-        <i className="text-lg font-medium ri-home-5-line"></i>
+    <div className="h-screen flex flex-col">
+      {/* Floating Home Button */}
+      <Link to="/home" className="fixed right-3 top-3 h-10 w-10 bg-white shadow-md flex items-center justify-center rounded-full hover:scale-110 transition">
+        <i className="text-xl ri-home-5-line text-gray-700"></i>
       </Link>
 
-      <div className='h-1/2'>
+      {/* Map Section */}
+      <div className="h-1/2 border-b">
         <LiveTracking />
       </div>
 
-      <div className='h-1/2 p-4'>
-        <div className='flex items-center justify-between'>
-          <img className='h-12' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
-          <div className='text-right'>
-            <h2 className='text-lg font-medium capitalize'>{ride?.captain.fullname.firstname}</h2>
-            <h4 className='text-xl font-semibold -mt-1 -mb-1'>{ride?.captain.vehicle.plate}</h4>
-            <p className='text-sm text-gray-600'>Maruti Suzuki Alto</p>
+      {/* Ride Info Section */}
+      <div className="h-1/2 p-5 bg-white shadow-inner flex flex-col justify-between">
+        {/* Captain Info */}
+        {/* Captain Info */}
+<div className="flex items-center gap-5  pb-4">
+  <img
+    className="h-20 rounded-full object-cover"
+    src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg"
+    alt="Driver"
+  />
+  <div className="flex-1">
+    <h2 className="text-lg font-semibold capitalize">{ride?.captain.fullname.firstname}</h2>
+    <p className="text-gray-500">{ride?.captain.vehicle.plate}</p>
+    <span className="text-sm text-gray-400">Toyota</span> {/* You can replace "Toyota" dynamically if you have model info */}
+  </div>
+  <div className="flex gap-3">
+    {/* Chat Button */}
+    <button
+      onClick={() => {
+        // Add chat logic here or navigation
+        alert("Chat feature coming soon!");
+      }}
+      className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md transition"
+      aria-label="Chat with driver"
+    >
+      <i className="ri-chat-3-line text-xl"></i>
+    </button>
+
+    {/* Call Button */}
+    <button
+      onClick={() => {
+        // Use tel: link to call the driver if number available
+        if (ride?.captain.phone) {
+          window.location.href = `tel:${ride.captain.phone}`;
+        } else {
+          alert("Driver phone number not available");
+        }
+      }}
+      className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md transition"
+      aria-label="Call driver"
+    >
+      <i className="ri-phone-line text-xl"></i>
+    </button>
+  </div>
+</div>
+
+
+        {/* Destination & Fare */}
+        <div className="mt-4 space-y-3">
+          <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg shadow-sm">
+            <i className="text-lg ri-map-pin-2-fill text-green-600"></i>
+            <div>
+              <h3 className="text-lg font-medium">Drop-off</h3>
+              <p className="text-sm text-gray-500">{ride?.destination}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg shadow-sm">
+            <i className="ri-currency-line text-yellow-500"></i>
+            <div>
+              <h3 className="text-lg font-medium">₹{ride?.fare}</h3>
+              <p className="text-sm text-gray-500">Cash Payment</p>
+            </div>
           </div>
         </div>
 
-        <div className='flex gap-2 justify-between flex-col items-center'>
-          <div className='w-full mt-5'>
-            <div className='flex items-center gap-5 p-3 border-b-2'>
-              <i className="text-lg ri-map-pin-2-fill"></i>
-              <div>
-                <h3 className='text-lg font-medium'>562/11-A</h3>
-                <p className='text-sm -mt-1 text-gray-600'>{ride?.destination}</p>
-              </div>
-            </div>
-            <div className='flex items-center gap-5 p-3'>
-              <i className="ri-currency-line"></i>
-              <div>
-                <h3 className='text-lg font-medium'>₹{ride?.fare}</h3>
-                <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ✅ Conditional rendering after payment */}
+        {/* Payment Section */}
         {!paymentSuccess ? (
           <button
-            className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg'
+            className="mt-5 w-full bg-[#00B894] hover:bg-[#019A78] text-white font-semibold py-3 rounded-lg shadow-md transition-transform transform hover:scale-[1.02]"
             onClick={handlePayment}
           >
             Make a Payment
           </button>
         ) : (
-          <div className='mt-5 text-center'>
-            <h2 className='text-green-600 font-bold text-lg mb-3'>✅ Payment Successful</h2>
+          <div className="mt-5 text-center">
+            <h2 className="text-green-600 font-bold text-lg mb-3">Payment Successful</h2>
             <button
               onClick={() => navigate('/start-home')}
-              className='bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold'
+              className="bg-blue-600 mt-5 w-full text-white font-semibold py-3 rounded-lg shadow-md transition-transform transform hover:scale-[1.02]"
             >
               Go to Home
             </button>
